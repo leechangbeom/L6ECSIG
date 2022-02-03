@@ -1,0 +1,11 @@
+data <- read.csv("cours1.csv", fileEncoding = "UTF-8")
+head(data,1)
+str(data)
+tab  <- table(data$appétence.codage..1.fort.4.mauvais)
+tab
+barplot(tab)
+barplot(tab,col=heat.colors(5),border=NA,xlab="appétence(1 oui - 4 non)")
+tab <- table(data$futur)
+barplot(tab,col=heat.colors(5),border=NA,legend=T)
+etik <- names(tab)
+barplot(tab,names.arg=etik, las = 2)
