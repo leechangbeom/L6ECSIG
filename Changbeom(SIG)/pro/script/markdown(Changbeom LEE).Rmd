@@ -1,0 +1,47 @@
+---
+title: "Script markdown de Chang-Beom"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+editor_options:
+  chunk_output_type: console
+  
+
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Exercice
+
+```{r}
+villes <- c("Vitry-sur-Seine", "Ivry-sur-Seine", "Montrouge")
+habitants <- c(92531,59572,48991)
+df <- as.data.frame(cbind(villes, habitants))
+df
+```
+
+# Indexation
+
+```{r}
+villes [1]
+habitants [2]
+df [1,2]
+```
+
+```{r}
+df$villes
+df$habitants
+```
+
+
+# Résultat
+
+```{r}
+#mean(df$habitants)
+mean(habitants)
+```
