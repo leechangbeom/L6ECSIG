@@ -1,0 +1,77 @@
+---
+title: "Correction exercice"
+author: "B. Maranget"
+date: "17/02/2022"
+output: 
+  html_document: 
+    number_sections: yes
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache = TRUE)
+# Passer la valeur suivante à TRUE pour reproduire les extractions.
+knitr::opts_chunk$set(eval = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+# Objet
+
+L'exercice proposé permet de comprendre 
+
+- ce qu'est un fichier .Rmd (markdown)
+
+- comment faire un dataframe
+
+- comment utiliser une fonction simple sur un vecteur
+
+
+# Barème
+
+- 1 point pour la remise
+
+- 1 autre pour le dataframe
+
+- 1 dernier pour la formule
+
+
+
+# Script
+
+## Une première correction
+
+```{r}
+ville <- c("Paris", "Lyon", "Marseille")
+pop <- c(2161000, 523275, 861635)
+df1 <- as.data.frame(cbind(ville, pop))
+df
+str(df1)
+mean(pop)
+```
+
+
+En fait, la constitution d'un dataframe est beaucoup plus simple que cela.
+
+## Une meilleure correction
+
+```{r}
+df2 <- data.frame(toto = ville, pop = pop)
+df2
+str(df2)
+```
+
+## Pourquoi meilleure ?
+
+Comparaison des deux objets
+
+
+```{r}
+knitr::kable(df1, caption = "df mauvais")
+knitr::kable(df2, caption = "df bon")
+```
+
+
