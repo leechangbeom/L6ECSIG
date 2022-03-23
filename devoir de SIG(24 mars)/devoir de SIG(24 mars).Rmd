@@ -1,0 +1,28 @@
+---
+title: "Devoir de SIG(24 mars)"
+author: "Chang-Beom LEE"
+date: "3/23/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+getwd()
+setwd("/Users/chang-beom.lee/Desktop/devoir de SIG(24 mars)")
+library(sf)
+library(mapsf)
+st_read("export.geojson")
+Bureaux <- st_read("export.geojson")
+Bondy <- st_read("export.geojson2")
+str(Bureaux)
+```
+
+```{r}
+png(height = 800, width = 600, filename = "Changbeom.png")
+plot(Bondy$geometry, col = "grey", border = "grey")
+plot(Bureaux$geometry, col = "red", border = "red", add = TRUE)
+dev.off()
+````
