@@ -1,0 +1,96 @@
+---
+title: "SIG Final script 2"
+author: "Chang-Beom LEE"
+date: "5/12/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Carte de vote
+
+```{r}
+setwd("/Users/chang-beom.lee/Desktop/Final/data")
+library(sf)
+library(mapsf)
+data<-st_read("vote.gpkg","jointure")
+```
+
+```{r}
+apply(data[,14:18,drop=T],2,sum)
+summary(data[,17:18,drop=T])
+data<-data[,17]
+names(data)[1]<-c("DUGUET")
+palette <- heat.colors(8, rev = T)
+seuils <- c(0, 25, 50, 75, 100, 125, 150, 175, 200)
+str(data)
+png("resultDUGUET.png", width = 4000, height = 4000, res = 400)
+mf_choro(data, var = "DUGUET", breaks = seuils, pal = palette,border = NA, leg_pos = "n")
+mf_label(data,"DUGUET")
+mf_inset_on(data, pos = "topright")
+par(mar = c(2,2,2,2))
+hist(data$DUGUET, border = NA, right = F, col=palette, main = "", xlab = "", ylab="")
+mf_inset_off()
+dev.off()
+```
+
+```{r}
+library("png")
+img1<-readPNG("resultDUGUET.png")
+display<-function(...){
+  imageList<-list(...) ;   totalWidth<-0 ;   maxHeight<-0 ;   
+for (img in imageList){    if(is.character(img)) img<-readPNG(img) ;  dimg<-dim(img) ;  totalWidth<-totalWidth+dimg[2] ;   maxHeight<-max(maxHeight,dimg[1])  }
+  par(mar=c(0,0,0,0)) ;   plot(c(0,totalWidth),c(0,maxHeight),type="n",asp=1,xaxt="n",yaxt="n",xlab="x",ylab="y") ;   offset<-0 ; 
+  for (img in imageList){    dimg<-dim(img) ;    rasterImage(img,offset,0,offset+dimg[2],dimg[1])
+    offset<-offset+dimg[2]  }}
+display(img1)
+```
+=> Cette carte montre que Vincent DUGUET a obtenu beaucoup de votes dans les quatres régions centrales à Bondy
+
+#Carte d'une variable de carroyage
+
+=> J'ai utilisé les commandes ci-dessous pour créer une carte interactive et ajouter un openstreetmap en utilisant un package leaflet.
+
+```{r}
+library(leaflet)
+leaflet()%>%addTiles()
+```
+
+
+```{r}
+m<-leaflet()
+m<-addTiles(m)
+m
+```
+
+=> Et j'ai chargé un fichier insee.gpkg et maintenant on peut voir des détails de Bondy.
+
+```{r}
+library(sf)
+data<-st_read("insee.gpkg","bondy")
+```
+
+```{r}
+data<-st_transform(data,4326)
+data$Men_prop
+```
+
+```{r}
+pal<-colorNumeric(
+  palette = "YIOrRd",
+  domain = data$Men_prop
+)
+leaflet(data) %>%
+  addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+    opacity = 1.0, fillOpacity = 0.5,
+    fillColor = ~colorQuantile("YlOrRd",Men_prop)(Men_prop),
+    highlightOptions = highlightOptions(color = "white", weight = 2,
+      bringToFront = TRUE)) %>% addLegend("bottomright", pal = pal, values = ~Men_prop,
+    title = "Nombre de ménages propriétaires",
+    opacity = 1
+  ) %>% addTiles()
+```
+
+=> J'ai sélectionné « Men_prop » pour comprendre le nombre de ménages propriétaires, et en utilisant les commandes ci-dessus, j'ai fait une carte de Bondy en damier et ajouté des couleurs pour mieux distinguer la répartition des nombre de ménages propriétaires. Et sur cette carte, on peut voir qu'il y a beaucoup de Nombre de ménages propriétaires dans les zones centre et sud de Bondy.
